@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="my">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy 100th Day Anniversary! ❤️</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Myanmar & English -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Padauk:wght@400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      body {
+        font-family: "Padauk", "Playfair Display", sans-serif;
+        background: linear-gradient(to bottom, #ffe4e6, #fecdd3, #fda4af);
+        overflow-x: hidden;
+      }
+      .fancy-title {
+        font-family: "Cherry Bomb One", "Padauk", cursive;
+      }
+      /* Heart Rain Animation */
+      .heart-particle {
+        position: absolute;
+        pointer-events: none;
+        animation: fall linear forwards;
+      }
+      @keyframes fall {
+        0% {
+          transform: translateY(-50px) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+      /* Soft Floating animation for UI elements */
+      .floating {
+        animation: float 4s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      /* Pulse Animation for main heart */
+      .pulse-heart {
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen flex flex-col items-center justify-between text-slate-800 relative pb-10"
+  >
+    <!-- Canvas for Floating Hearts Background -->
+    <div
+      id="heart-container"
+      class="fixed inset-0 pointer-events-none z-0 overflow-hidden"
+    ></div>
+
+    <!-- Background Music (Using a sweet royalty-free acoustic track placeholder) -->
+    <div class="fixed top-4 right-4 z-50">
+      <button
+        id="music-btn"
+        class="bg-white/80 backdrop-blur-sm p-3 rounded-full shadow-lg text-rose-500 hover:bg-rose-50 transition-all duration-300 flex items-center justify-center"
+      >
+        <i id="music-icon" class="fas fa-music text-lg"></i>
+      </button>
+      <audio id="bg-music" loop>
+        <source
+          src="https://assets.mixkit.co/active_storage/sfx/123/123.wav"
+          type="audio/wav"
+        />
+        <!-- Simple soft chime or note. For actual deployment user can change to YouTube or MP3 -->
+      </audio>
+    </div>
+
+    <!-- Header Section -->
+    <header class="w-full text-center py-10 px-4 z-10">
+      <div class="max-w-2xl mx-auto">
+        <span
+          class="inline-block bg-white/60 backdrop-blur-sm text-rose-600 font-bold px-4 py-1.5 rounded-full text-sm uppercase tracking-wider mb-3 shadow-sm"
+        >
+          💖 Our Special Day 💖
+        </span>
+        <h1
+          class="fancy-title text-4xl md:text-6xl text-rose-600 drop-shadow-md mb-2"
+        >
+          ပျော်ရွှင်စရာ ရက် ၁၀၀ ပြည့်နေ့လေးပါ
+        </h1>
+        <p class="text-lg md:text-xl text-rose-700 font-semibold italic">
+          Happy 100th Day Anniversary, My Love!
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main
+      class="w-full max-w-5xl px-4 z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-center my-4"
+    >
+      <!-- Left Side: Interactive Love Counter & Giant Heart -->
+      <div
+        class="flex flex-col items-center text-center bg-white/40 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-white/40 floating"
+      >
+        <div class="relative mb-6">
+          <!-- Outer glowing rings -->
+          <div
+            class="absolute inset-0 bg-rose-400 rounded-full blur-xl opacity-30 animate-pulse"
+          ></div>
+          <div
+            class="pulse-heart text-8xl md:text-9xl text-rose-500 relative cursor-pointer filter drop-shadow"
+            onclick="createBurst(event)"
+          >
+            ❤️
+          </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-rose-800 mb-2">
+          တို့ ချစ်ခဲ့ကြတာ...
+        </h2>
+
+        <!-- Love Counter Card -->
+        <div
+          class="bg-gradient-to-r from-rose-500 to-pink-500 text-white rounded-2xl py-4 px-8 shadow-md inline-block my-2"
+        >
+          <span
+            id="day-counter"
+            class="text-5xl font-black tracking-wider block"
+            >၁၀၀</span
+          >
+          <span class="text-sm font-semibold uppercase tracking-widest"
+            >ရက်မြောက်နေ့လေး</span
+          >
+        </div>
+
+        <!-- Detail Timer (Hours, Minutes, Seconds) -->
+        <div class="grid grid-cols-3 gap-2 mt-4 text-rose-900 w-full max-w-xs">
+          <div class="bg-white/60 rounded-xl p-2 shadow-sm">
+            <span id="hours-val" class="block text-xl font-bold">24</span>
+            <span class="text-xs">နာရီ</span>
+          </div>
+          <div class="bg-white/60 rounded-xl p-2 shadow-sm">
+            <span id="mins-val" class="block text-xl font-bold">00</span>
+            <span class="text-xs">မိနစ်</span>
+          </div>
+          <div class="bg-white/60 rounded-xl p-2 shadow-sm">
+            <span id="secs-val" class="block text-xl font-bold">00</span>
+            <span class="text-xs">စက္ကန့်</span>
+          </div>
+        </div>
+
+        <p class="text-sm text-rose-700/80 mt-4 italic">
+          "သဲသဲနဲ့အတူ ဖြတ်သန်းရတဲ့ စက္ကန့်တိုင်းက တန်ဖိုးရှိပါတယ်"
+        </p>
+      </div>
+
+      <!-- Right Side: Love Letter Panel -->
+      <div
+        class="bg-white/80 backdrop-blur-md rounded-3xl p-8 shadow-xl border border-rose-100 flex flex-col justify-between h-full min-h-[400px]"
+      >
+        <div>
+          <div
+            class="flex justify-between items-center border-b border-rose-100 pb-4 mb-4"
+          >
+            <h3 class="text-xl font-bold text-rose-700 flex items-center gap-2">
+              <i class="fas fa-envelope-open-text"></i> ငါ့ရဲ့ ကမ္ဘာလေးသို့...
+            </h3>
+            <span class="text-sm text-slate-500"
+              ><i class="far fa-calendar-alt"></i> ယနေ့</span
+            >
+          </div>
+
+          <!-- Dynamic Love Letters -->
+          <div
+            id="letter-content"
+            class="text-slate-700 leading-relaxed space-y-4 text-base min-h-[180px] transition-all duration-500"
+          >
+            <!-- Loaded dynamically via JavaScript -->
+          </div>
+        </div>
+
+        <!-- Love Letter Controls -->
+        <div
+          class="flex justify-between items-center mt-6 pt-4 border-t border-rose-100"
+        >
+          <button
+            onclick="prevLetter()"
+            class="text-rose-500 hover:text-rose-700 font-bold flex items-center gap-1 transition"
+          >
+            <i class="fas fa-chevron-left"></i> ရှေ့သို့
+          </button>
+          <span
+            id="letter-index"
+            class="text-xs text-rose-400 font-semibold bg-rose-50 px-2 py-1 rounded-full"
+          >
+            စာလွှာ ၁ / ၃
+          </span>
+          <button
+            onclick="nextLetter()"
+            class="text-rose-500 hover:text-rose-700 font-bold flex items-center gap-1 transition"
+          >
+            နောက်သို့ <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Photo Gallery & Memories Section -->
+    <section class="w-full max-w-5xl px-4 z-10 mt-10">
+      <div class="text-center mb-8">
+        <h3 class="fancy-title text-3xl text-rose-700 font-bold mb-2">
+          📸 တို့နှစ်ယောက်ရဲ့ အမှတ်တရလေးများ
+        </h3>
+        <p class="text-rose-600/80 text-sm">
+          တို့တူတူ ဖြတ်သန်းခဲ့ကြတဲ့ အချိန်လေးတွေပေါ့
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div
+          class="bg-white p-4 rounded-2xl shadow-lg transform hover:-rotate-2 hover:scale-105 transition-all duration-300"
+        >
+          <div
+            class="aspect-video bg-rose-100 rounded-xl overflow-hidden mb-3 relative group"
+          >
+            <img src="start.jpg" alt="" class="w-full h-full object-cover" />
+            <!-- Overlay with text, remains responsive and legible on smaller screens -->
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-white text-center text-sm font-semibold sm:text-base"
+            >
+              "How we started"
+            </div>
+          </div>
+          <h4 class="font-bold text-rose-700 text-center text-lg">
+            How we started
+          </h4>
+          <p class="text-xs text-slate-500 text-center mt-1">
+            အဲ့မှာ ဇာတ်လမ်းလေးစပြီ
+          </p>
+        </div>
+
+        <!-- Card 2 -->
+        <div
+          class="bg-white p-4 rounded-2xl shadow-lg transform hover:rotate-1 hover:scale-105 transition-all duration-300"
+        >
+          <div
+            class="aspect-video bg-rose-200 rounded-xl overflow-hidden mb-3 relative group"
+          >
+            <img src="meAndYou.jpg" alt="" class="w-full h-full object-cover" />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-white text-center text-sm font-semibold sm:text-base"
+            >
+              "How we ended up"
+            </div>
+          </div>
+          <h4 class="font-bold text-rose-700 text-center text-lg">
+            How we ended up
+          </h4>
+          <p class="text-xs text-slate-500 text-center mt-1">
+            ချစ်ဆုံးလေးပုခုံးပေါ်ကအမှတ်တရ
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div
+          class="bg-white p-4 rounded-2xl shadow-lg transform hover:-rotate-1 hover:scale-105 transition-all duration-300"
+        >
+          <div
+            class="aspect-video bg-rose-300 rounded-xl overflow-hidden mb-3 relative group"
+          >
+            <img
+              src="underYourUmbrella.jpg"
+              alt=""
+              class="w-full h-full object-cover"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4 text-white text-center text-sm font-semibold sm:text-base"
+            >
+              "ဖိနပ်လဲ စီးကြတာ ပျော်စရာကြီး"
+            </div>
+          </div>
+          <h4 class="font-bold text-rose-700 text-center text-lg">
+            ပျော်စရာကောင်းတဲ့နေ့လေး
+          </h4>
+          <p class="text-xs text-slate-500 text-center mt-1">
+            ထီးတစ်လက်နဲ့ ပျော်ရွှင်စရာအမှတ်တရလေးတစ်ခု
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- Interactive Love Quote / Fortune Cookie Section -->
+    <section class="w-full max-w-2xl px-4 z-10 mt-12 mb-8">
+      <div
+        class="bg-gradient-to-r from-rose-400/80 to-pink-400/80 backdrop-blur-md rounded-3xl p-6 shadow-xl border border-white/20 text-center text-white"
+      >
+        <h3 class="font-bold text-xl mb-3">
+          💬 မင်းအတွက် ငါ့ရဲ့ နှလုံးသားစကားစုလေးများ
+        </h3>
+        <div
+          id="quote-box"
+          class="min-h-[60px] flex items-center justify-center text-lg font-medium px-4 py-2 transition-all duration-500"
+        >
+          "မင်းဟာ ငါ့ဘဝရဲ့ အလှပဆုံးသော အဆင်တန်ဆာလေးပါ..."
+        </div>
+        <button
+          onclick="generateQuote()"
+          class="mt-4 bg-white text-rose-600 font-bold px-6 py-2.5 rounded-full shadow-md hover:bg-rose-50 active:scale-95 transition-all"
+        >
+          နောက်ထပ်တစ်ခု ဖတ်ချင်တယ် ✨
+        </button>
+      </div>
+    </section>
+
+    <!-- Anniversary Letterbox Form - Send a love note to local storage storage (Fun feature) -->
+    <section class="w-full max-w-lg px-4 z-10 my-6">
+      <div class="bg-white/60 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+        <h4 class="font-bold text-rose-800 text-center mb-3">
+          📝 ဒီနေ့လေးအတွက် တစ်ခုခု ရေးခဲ့ရအောင်
+        </h4>
+        <div class="space-y-3">
+          <textarea
+            id="note-input"
+            rows="3"
+            placeholder="မင်းရဲ့ ချစ်သူဆီ ဒီနေ့လေးအတွက် ဘာပြောချင်လဲ... ရေးခဲ့နော်"
+            class="w-full p-3 rounded-xl border border-rose-200 focus:outline-none focus:ring-2 focus:ring-rose-400 text-sm bg-white/80"
+          ></textarea>
+          <button
+            onclick="saveNote()"
+            class="w-full bg-rose-500 text-white font-bold py-2.5 rounded-xl hover:bg-rose-600 transition shadow"
+          >
+            မှတ်တမ်းတင်သိမ်းဆည်းမည်
+          </button>
+        </div>
+        <div
+          id="saved-notes-box"
+          class="mt-4 hidden border-t border-rose-200/50 pt-3"
+        >
+          <h5 class="text-xs font-bold text-rose-700 mb-2">
+            သိမ်းဆည်းထားတဲ့ စာစုတိုလေးများ-
+          </h5>
+          <div
+            id="notes-list"
+            class="space-y-2 max-h-32 overflow-y-auto pr-1"
+          ></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Custom Modal for Alerts -->
+    <div
+      id="custom-modal"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4"
+    >
+      <div
+        class="bg-white rounded-2xl p-6 max-w-xs w-full text-center shadow-2xl"
+      >
+        <div class="text-rose-500 text-5xl mb-3">❤️</div>
+        <p id="modal-msg" class="text-slate-700 font-semibold mb-4"></p>
+        <button
+          onclick="closeModal()"
+          class="bg-rose-500 text-white px-6 py-2 rounded-full font-bold hover:bg-rose-600 transition"
+        >
+          ပိတ်မည်
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full text-center text-xs text-rose-800/60 mt-10 z-10">
+      <p>
+        ဖန်တီးထားသူ မင်းရဲ့ ချစ်သူလေး ❤️ | ရက် ၁၀၀ ပြည့်မြောက်ခြင်း အထိမ်းအမှတ်
+      </p>
+    </footer>
+
+    <!-- JS Logic -->
+    <script>
+      // --- DATA ---
+      const letters = [
+        `<strong>ချစ်ရတဲ့ စကြဝဠာလေး...</strong><br><br>
+             မင်းနဲ့ စတင် သိကျွမ်းခွင့်ရခဲ့ပြီး ချစ်သူတွေ ဖြစ်ခဲ့ကြတဲ့ နေ့လေးကစလို့ ဒီနေ့အထိ ရက်ပေါင်း ၁၀၀ ဆိုတဲ့အချိန်အတွင်းမှာ အမှတ်တရလေးတွေ အများကြီး ရှိခဲ့ကြတယ်နော်။ ကျောင်းဖွင့်ရက်တိုင်း မင်းနဲ့ ရှိနေရတဲ့ အချိန်တွေဟာ ကိုယ့်ဘဝရဲ့ စိတ်လှုပ်ရှားစရာ အကောင်းဆုံးနဲ့ အပျော်ရွှင်ဆုံး အချိန်တွေပါပဲ။`,
+
+        `<strong>အမြဲတမ်း ပြုံးနေပေးပါ...</strong><br><br>
+             မင်းရဲ့ သေးငယ်တဲ့ အပြုံးလေးတွေ၊ စနောက်တတ်တဲ့ စကားလုံးလေးတွေကအစ ကိုယ့်ကို ပျော်ရွှင်စေပါတယ်။ တစ်ခါတလေ စိတ်ကောက်တာ၊ ရန်ဖြစ်ရတာလေးတွေ ရှိခဲ့ပေမယ့် မင်းအပေါ် ထားတဲ့ ကိုယ့်အချစ်တွေက လျော့မသွားဘဲ ပိုပိုတိုးလို့ပဲ လာခဲ့တာပါ။`,
+
+        `<strong>ကျေးဇူးတင်ပါတယ်...</strong><br><br>
+             ကိုကို့ဘဝထဲကို ဝင်ရောက်လာပေးလို့၊ ကိုကို့အပေါ် ဂရုစိုက်ပြီး ချစ်ပေးလို့ အရမ်းကျေးဇူးတင်ပါတယ်ဗျာ။ ဒီထက်မက ပိုပြီးလည်း သဲသဲကို ချစ်ပေးသွားပါ့မယ်။ ကိုယ့်ရဲ့ ဘဝလက်တွဲဖော်လေးအဖြစ် အမြဲတမ်း ရှိနေပေးနော်။ ရက် ၁၀၀ ပြည့် အမှတ်တရလေးကစလို့ ထာဝရအထိ ချစ်သွားကြမယ်နော်။`,
+      ];
+
+      const quotes = [
+        "မင်းဟာ ကိုယ့်ဘဝရဲ့ အလှပဆုံး လက်ဆောင်လေးတစ်ခုပါ...",
+        "မင်းရောက်လာတဲ့အချိန်လေးက နေရောင်ခြည်ဖြာကျနေတဲ့ မနက်ခင်းလေး ဖြစ်သွားစေသလိုပါပဲ။",
+        "မင်းရဲ့ လက်ဖဝါးလေးကို ဆုပ်ကိုင်ထားရတဲ့ ခံစားချက်ထက် သာတာ ဘာမှမရှိဘူး။",
+        "အေးစက်နေတဲ့နေ့ရက်တိုင်းက ပြန်ပီးနွေးထွေးလာခဲ့တယ်။",
+        "ရက် ၁၀၀ တင်မကဘူး၊ တစ်သက်လုံး မင်းရဲ့ အနားမှာ ရှိနေနိုင်အောင် ကြိုးစားမှာပါ။",
+        "မင်းရဲ့ရယ်သံလေးက ကိုယ့်နှလုံးအိမ်ကို ပိုပီးတောက်ပသွားစေနိုင်တယ်။",
+        "ကိုယ့်ရဲ့အကြိုက်ဆုံးတေးသွားလေးက မင်းနှုတ်ကထွက်လာတဲ့ သီချင်းညည်းသံလေးတွေပါပဲ။",
+        "မင်းနဲ့အတူဖြတ်သန်းရတဲ့အချိန်တိုင်းက တန်ဖိုးရှိပါတယ်...",
+      ];
+
+      let currentLetterIdx = 0;
+
+      // --- FUNCTIONS ---
+
+      // Custom Modal helper
+      function showModal(msg) {
+        document.getElementById("modal-msg").innerText = msg;
+        const modal = document.getElementById("custom-modal");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("custom-modal");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+      }
+
+      // Setup/Init
+      window.onload = function () {
+        displayLetter();
+        generateQuote();
+        startTimer();
+        createHeartRain();
+        loadNotes();
+      };
+
+      // Letter Slider
+      function displayLetter() {
+        const content = document.getElementById("letter-content");
+        const indexSpan = document.getElementById("letter-index");
+
+        content.style.opacity = 0;
+        setTimeout(() => {
+          content.innerHTML = letters[currentLetterIdx];
+          indexSpan.innerText = `စာလွှာ ${currentLetterIdx + 1} / ${letters.length}`;
+          content.style.opacity = 1;
+        }, 300);
+      }
+
+      function nextLetter() {
+        currentLetterIdx = (currentLetterIdx + 1) % letters.length;
+        displayLetter();
+      }
+
+      function prevLetter() {
+        currentLetterIdx =
+          (currentLetterIdx - 1 + letters.length) % letters.length;
+        displayLetter();
+      }
+
+      // Quote Generator
+      function generateQuote() {
+        const quoteBox = document.getElementById("quote-box");
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        quoteBox.style.opacity = 0;
+        setTimeout(() => {
+          quoteBox.innerText = `"${randomQuote}"`;
+          quoteBox.style.opacity = 1;
+        }, 300);
+      }
+
+      // Live Timer calculation
+      // Let's set the target or start date as exactly 100 days ago to show dynamic live seconds/minutes ticking of day 100
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 100); // Set 100 days ago
+
+      function startTimer() {
+        setInterval(() => {
+          const now = new Date();
+          const diffTime = Math.abs(now - startDate);
+
+          // Days, Hours, Minutes, Seconds calculation
+          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+          const diffHours = Math.floor(
+            (diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+          );
+          const diffMinutes = Math.floor(
+            (diffTime % (1000 * 60 * 60)) / (1000 * 60),
+          );
+          const diffSeconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+
+          document.getElementById("day-counter").innerText =
+            englishToMyanmarNumbers(diffDays);
+          document.getElementById("hours-val").innerText =
+            englishToMyanmarNumbers(diffHours.toString().padStart(2, "0"));
+          document.getElementById("mins-val").innerText =
+            englishToMyanmarNumbers(diffMinutes.toString().padStart(2, "0"));
+          document.getElementById("secs-val").innerText =
+            englishToMyanmarNumbers(diffSeconds.toString().padStart(2, "0"));
+        }, 1000);
+      }
+
+      // Myanmar Number Converter Helper
+      function englishToMyanmarNumbers(numStr) {
+        const myanmarNumbers = {
+          0: "၀",
+          1: "၁",
+          2: "၂",
+          3: "၃",
+          4: "၄",
+          5: "၅",
+          6: "၆",
+          7: "၇",
+          8: "၈",
+          9: "၉",
+        };
+        return numStr
+          .toString()
+          .split("")
+          .map((char) => myanmarNumbers[char] || char)
+          .join("");
+      }
+
+      // Floating Hearts Background (Heart Rain)
+      function createHeartRain() {
+        const container = document.getElementById("heart-container");
+        const heartIcons = ["❤️", "💖", "💗", "💓", "💕", "💝"];
+
+        setInterval(() => {
+          const heart = document.createElement("div");
+          heart.classList.add("heart-particle");
+          heart.innerText =
+            heartIcons[Math.floor(Math.random() * heartIcons.length)];
+
+          // Random position and scaling
+          const size = Math.random() * 20 + 10; // 10px to 30px
+          heart.style.fontSize = `${size}px`;
+          heart.style.left = `${Math.random() * 100}vw`;
+
+          // Random animation duration
+          const duration = Math.random() * 5 + 5; // 5s to 10s
+          heart.style.animationDuration = `${duration}s`;
+
+          container.appendChild(heart);
+
+          // Remove heart after animation ends
+          setTimeout(() => {
+            heart.remove();
+          }, duration * 1000);
+        }, 800); // Create heart every 800ms
+      }
+
+      // Burst of Hearts on Clicking the main giant heart
+      function createBurst(event) {
+        const container = document.getElementById("heart-container");
+        const heartTypes = ["❤️", "💖", "💗", "💓", "💕"];
+
+        for (let i = 0; i < 15; i++) {
+          const heart = document.createElement("div");
+          heart.classList.add("heart-particle");
+          heart.innerText =
+            heartTypes[Math.floor(Math.random() * heartTypes.length)];
+
+          const size = Math.random() * 15 + 15;
+          heart.style.fontSize = `${size}px`;
+
+          // Position at click coordinate
+          heart.style.left = `${event.clientX}px`;
+          heart.style.top = `${event.clientY}px`;
+
+          // Random trajectory directions (using CSS variables for dynamic pathing if needed, but simple falling with different offsets works too)
+          heart.style.animationDuration = `${Math.random() * 2 + 1}s`;
+          heart.style.left = `${event.clientX + (Math.random() * 200 - 100)}px`;
+
+          container.appendChild(heart);
+
+          setTimeout(() => {
+            heart.remove();
+          }, 2000);
+        }
+      }
+
+      // Music Controls
+      const musicBtn = document.getElementById("music-btn");
+      const audio = document.getElementById("bg-music");
+      const musicIcon = document.getElementById("music-icon");
+      let isPlaying = false;
+
+      musicBtn.addEventListener("click", () => {
+        if (isPlaying) {
+          audio.pause();
+          musicIcon.className = "fas fa-music text-lg";
+          musicBtn.classList.remove("bg-rose-100");
+        } else {
+          audio
+            .play()
+            .then(() => {
+              musicIcon.className = "fas fa-pause text-lg";
+              musicBtn.classList.add("bg-rose-100");
+            })
+            .catch((err) => {
+              console.log("Audio play failed: ", err);
+              showModal(
+                "နောက်ခံဂီတဖွင့်ရန် Browser settings တွင် ခွင့်ပြုချက်လိုအပ်နိုင်ပါသည် ❤️",
+              );
+            });
+        }
+        isPlaying = !isPlaying;
+      });
+
+      // Local Notes features to leave romantic memos
+      function saveNote() {
+        const input = document.getElementById("note-input");
+        const noteText = input.value.trim();
+
+        if (noteText === "") {
+          showModal("စာလေးတစ်ခုခု အရင်ရေးပေးပါနော် 😘");
+          return;
+        }
+
+        let notes = JSON.parse(
+          localStorage.getItem("anniversary_notes") || "[]",
+        );
+        notes.push({
+          text: noteText,
+          time:
+            new Date().toLocaleTimeString() +
+            " " +
+            new Date().toLocaleDateString(),
+        });
+
+        localStorage.setItem("anniversary_notes", JSON.stringify(notes));
+        input.value = "";
+        showModal(
+          "မှတ်တမ်းလေး သိမ်းဆည်းပြီးပါပြီ။ ချစ်သူလေး ဖတ်ဖို့ အဆင်သင့်ပါပဲ။ ❤️",
+        );
+        loadNotes();
+      }
+
+      function loadNotes() {
+        const notesList = document.getElementById("notes-list");
+        const notesBox = document.getElementById("saved-notes-box");
+        let notes = JSON.parse(
+          localStorage.getItem("anniversary_notes") || "[]",
+        );
+
+        if (notes.length > 0) {
+          notesBox.classList.remove("hidden");
+          notesList.innerHTML = "";
+          notes
+            .slice()
+            .reverse()
+            .forEach((note) => {
+              const div = document.createElement("div");
+              div.className =
+                "bg-rose-50/70 p-2.5 rounded-lg border-l-4 border-rose-400 text-xs text-slate-700";
+              div.innerHTML = `<p class="font-medium">${note.text}</p><span class="text-[10px] text-slate-400 block text-right mt-1">${note.time}</span>`;
+              notesList.appendChild(div);
+            });
+        } else {
+          notesBox.classList.add("hidden");
+        }
+      }
+    </script>
+  </body>
+</html>
