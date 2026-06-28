@@ -591,7 +591,7 @@
         }
       }
 
-      // Music Controls
+      // Optimized Music Controls
       const musicBtn = document.getElementById("music-btn");
       const audio = document.getElementById("bg-music");
       const musicIcon = document.getElementById("music-icon");
@@ -602,23 +602,24 @@
           audio.pause();
           musicIcon.className = "fas fa-music text-lg";
           musicBtn.classList.remove("bg-rose-100");
+          isPlaying = false;
         } else {
+          // Force reload asset to ensure it triggers freshly on user tap
+          audio.load();
           audio
             .play()
             .then(() => {
               musicIcon.className = "fas fa-pause text-lg";
               musicBtn.classList.add("bg-rose-100");
+              isPlaying = true;
             })
             .catch((err) => {
               console.log("Audio play failed: ", err);
-              showModal(
-                "နောက်ခံဂီတဖွင့်ရန် Browser settings တွင် ခွင့်ပြုချက်လိုအပ်နိုင်ပါသည် ❤️",
-              );
+              // Clean playback attempt fallback
+              isPlaying = false;
             });
         }
-        isPlaying = !isPlaying;
       });
-
       // Local Notes features to leave romantic memos
       function saveNote() {
         const input = document.getElementById("note-input");
